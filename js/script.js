@@ -4,8 +4,10 @@ var citySearch = document.getElementById(`city-search`)
 var searchBtn = document.getElementById(`search-button`)
 var searchHistList = document.getElementById(`search-list`)
 var currentWeatherEl = document.getElementById(`current-weather`)
-var weatherForecastEl = document.getElementById(`weather-forecast`)
+var weatherForecastEl = document.querySelector(`.forecast-container`)
 var currentDate = new Date().toLocaleDateString('en-US')
+
+console.log(weatherForecastEl)
 
 // weather url and API var
 var url = `https://api.openweathermap.org/data/2.5/weather?q=`
@@ -85,27 +87,37 @@ var getCurrentWeather = function (cityName) {
           // console.log(data)
           uv.textContent = "UV Index:" + " " + data.daily[0].uvi;
 
-
+          weatherForecastEl.innerHTML = ""
           // 5 day forecast title
-          var fiveForecastHead = document.querySelector("#forecast-label");
-          fiveForecastHead.innerHTML = '<h2>' + '5 Day Forecast' + '</h2>'
+          // var fiveForecastHead = document.querySelector("#forecast-label");
+          // fiveForecastHead.innerHTML = '<h2>' + '5 Day Forecast' + '</h2>'
 
 
           // 5 day forecast call
-          for (let index = 0; index < 6; index++) {
+          for (let index = 1; index < 6; index++) {
             console.log(data.daily[index].weather[0])
             var daily = new Date(data.daily[index].dt * 1000).toLocaleDateString('en-US');
             var dailyIcon = data.daily[index].weather[0].icon;
             var dailyIconURL = 'https://www.openweathermap.org/img/wn/' + dailyIcon + '.png';
+
+            var forecastContainer = document.querySelector(".forecast-container");
+            var element = document.createElement("div");
+            element.innerHTML = '<h4>' + '<p>' + daily + '</p>' + '</h4>' + '<img src="' + dailyIconURL + '"alt="Weather Icons">' + '</p>' + '<p>' + "Temp: " + Math.round(data.daily[index].temp.max) + " ℉" + '</p>' + '<p>' + "Humid: " + data.daily[index].humidity + "%" + '</p>' + '</h6>'
+            forecastContainer.appendChild(element)
+
+
+
+
+
             
-            var forecastIcon = document.querySelector(".forecastIconandDate");
-            forecastIcon.innerHTML = daily + " " + '<img src="' + dailyIconURL + '"alt="Weather">'
+            // var forecastIcon = document.querySelector(".forecastIconandDate");
+            // forecastIcon.innerHTML = daily + " " + '<img src="' + dailyIconURL + '"alt="Weather">'
 
-            var forecastTemp = document.querySelector(".forecastTemp")
-            forecastTemp.textContent = "Temperature:" + " " + Math.round(data.daily[index].temp.max) + " " + "℉";
+            // var forecastTemp = document.querySelector(".forecastTemp")
+            // forecastTemp.textContent = "Temperature:" + " " + Math.round(data.daily[index].temp.max) + " " + "℉";
 
-            var forecastHumid = document.querySelector(".forecastHumid");
-            forecastHumid.textContent = "Humidity:" + " " + data.daily[index].humidity + "%";
+            // var forecastHumid = document.querySelector(".forecastHumid");
+            // forecastHumid.textContent = "Humidity:" + " " + data.daily[index].humidity + "%";
 
             // weatherForecastEl.classList.add('five-day', 'p-3', 'mr-3', 'card')
             // weatherForecastEl.innerHTML = '<h4>' + '<p>' + daily + '</p>' + '</h4>' + '<img src="' + dailyIconURL + '"alt="Weather Icons">' + '</p>' + '<p>' + "Temp: " + Math.round(data.daily[index].temp.max) + " ℉" + '</p>' + '<p>' + "Humid: " + data.daily[index].humidity + "%" + '</p>' + '</h6>'
